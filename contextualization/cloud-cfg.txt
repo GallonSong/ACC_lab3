@@ -1,0 +1,14 @@
+#cloud-config
+
+apt_update: true
+apt_upgrade: true
+packages:
+ - python3-pip
+ - git
+
+runcmd:
+ - git clone https://github.com/GallonSong/ACC_lab3.git
+ - pip3 install --upgrade pip 
+ - pip3 install celery==4.1.1
+ - celery worker -A tasks --workdir /home/ubuntu/ACC_lab3/ -D -l INFO
+

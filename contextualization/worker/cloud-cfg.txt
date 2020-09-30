@@ -8,6 +8,7 @@ packages:
 
 runcmd:
  - git clone https://github.com/GallonSong/ACC_lab3.git
+ - mkdir /home/ubuntu/ACC_lab3/data
  - pip3 install --upgrade pip 
  - pip3 install celery==4.1.1
  - celery worker -A tasks --workdir /home/ubuntu/ACC_lab3/ -D -l INFO

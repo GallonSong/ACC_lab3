@@ -13,7 +13,7 @@ private_net = "UPPMAX 2020/1-2 Internal IPv4 Network"
 floating_ip_pool_name = None
 floating_ip = None
 image_name = "Ubuntu 18.04"
-key_name = "Jialun"
+key_name = "JS_master"
 
 loader = loading.get_plugin_loader('password')
 

@@ -1,30 +1,33 @@
 import json
-from glob import glob
 from celery import Celery
+from celery.result import AsyncResult
 
-app = Celery('tasks', broker='amqp://js:js@192.168.2.11/jsvhost', backend='rpc://')
+app = Celery('tasks')
+app.config_from_object('celeryconfig')
 
-file_names = glob("/home/ubuntu/ACC_lab3/data/*")
 KEY_WORDS = {"han", "hon", "den", "det", "denna", "denne", "hen"}
 
-def get_tweets():
+def get_tweets(file_name):
     tweets = []
-    for f_n in file_names:
-        with open(f_n) as f:
-            for l in f:
-                if l.rstrip():
-                    a = json.loads(l)
-                    if "retweeted_status" not in a:
-                        tweets.append(a["text"])
+    with open(file_name) as f:
+        for line in f:
+            if line.rstrip():
+                tweet = json.loads(line)
+                if "retweeted_status" not in tweet:
+                    tweets.append(tweet["text"])
     return tweets
+
+def get_task(task_id):
+    res = tweet_task.AsyncResult(task_id, app=app)
+    return res
 
 @app.task
 def test():
     return "this is a test"
 
 @app.task
-def twitter_count():
-    tweets = get_tweets()
+def tweet_task(file_name):
+    tweets = get_tweets(file_name)
     words_list = map(lambda x:x.lower().split(), tweets)
     mentions = {w: 0 for w in KEY_WORDS}
 #    mention_tweets = {w:0 for w in KEY_WORDS}
@@ -36,4 +39,5 @@ def twitter_count():
             for ww in w_l:
                 if ww in KEY_WORDS:
                     mentions[ww] += 1
+    mentions["total"] = len(tweets)
     return mentions

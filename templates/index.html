@@ -1,0 +1,88 @@
+<!doctype html>
+<title>ACC lab3</title>
+<section class="content">
+<header>
+	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script>
+		function submit() {
+			var amount = document.getElementById("amount").value;
+			var url = "http://localhost:5000/tweet/"+amount.toString();
+			$.get(url, function(data){
+				var paragraph = document.getElementById("total");
+				paragraph.textContent = amount;
+				progress(data, amount);
+			});
+		}
+		
+		function progress(task_ids, amount) {
+			document.getElementById("progress").style.display = "block";
+			var timer, delay = 1000;
+			timer = setInterval(function(){
+				$.ajax({
+    					url : "http://localhost:5000/tweet/progress", 
+    					type: "POST",
+					contentType: 'application/json;charset=UTF-8',
+					data : JSON.stringify(task_ids),
+    					success: function(data, textStatus)
+    					{
+       						var finished = document.getElementById("finished");
+                                		finished.textContent = data;
+						if (data == amount) {
+							result(task_ids);
+							document.getElementById("show_result").style.display = "block";
+							clearInterval(timer);
+						}
+    					},
+				});
+			}, delay);
+		}
+
+		function result(task_ids) {
+			$.ajax({
+                        	url : "http://localhost:5000/tweet/result",
+                                type: "POST",
+                                contentType: 'application/json;charset=UTF-8',
+                                data : JSON.stringify(task_ids),
+                                success: function(data, textStatus)
+				{
+					document.getElementById("result").style.display = "block";
+					chart(data);
+				}
+			});
+		}
+
+		function chart(data){
+			var ctx = document.getElementById('myChart').getContext('2d');
+			var chart = new Chart(ctx, {
+    				type: 'bar',
+    				data: {
+        				labels: data.label,
+        				datasets: [{
+            					label: 'My First dataset',
+            					backgroundColor: 'rgb(255, 99, 132)',
+            					borderColor: 'rgb(255, 99, 132)',
+            					data: data.data
+        				}]
+    				},
+    				options: {}
+			});
+		}
+	</script>
+  </header>
+  <body>
+	<div>
+	  <p>There are {{total}} files in total!</p>
+	  <p>Please input how many files to be analyzed: </p>
+	  <input type="number" id="amount"><button onclick="submit()">SUBMIT</button>
+	</div>
+	<div id="progress" style="display: none;">
+		<p>Progress</p>
+		<p id="finished"></p> <p>/</p> <p id="total"></p>
+		<button id="show_result" style="display: none;" onclick="result()">RESULT</button>
+	</div>
+	<div id="result">
+		<canvas id="myChart"></canvas>
+	</div>
+  </body>
+</section>

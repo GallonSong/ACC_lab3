@@ -29,9 +29,9 @@
        						var finished = document.getElementById("finished");
                                 		finished.textContent = data;
 						if (data == amount) {
+							clearInterval(timer);
 							result(task_ids);
 							document.getElementById("show_result").style.display = "block";
-							clearInterval(timer);
 						}
     					},
 				});
@@ -55,11 +55,11 @@
 		function chart(data){
 			var ctx = document.getElementById('myChart').getContext('2d');
 			var chart = new Chart(ctx, {
-    				type: 'bar',
+    				type: 'horizontalBar',
     				data: {
         				labels: data.label,
         				datasets: [{
-            					label: 'My First dataset',
+            					label: 'Word Frequencies',
             					backgroundColor: 'rgb(255, 99, 132)',
             					borderColor: 'rgb(255, 99, 132)',
             					data: data.data
@@ -72,16 +72,13 @@
   </header>
   <body>
 	<div>
-	  <p>There are {{total}} files in total!</p>
-	  <p>Please input how many files to be analyzed: </p>
+	  <p>There are {{total}} files in total! Please input how many files to be analyzed: </p>
 	  <input type="number" id="amount"><button onclick="submit()">SUBMIT</button>
 	</div>
 	<div id="progress" style="display: none;">
-		<p>Progress</p>
-		<p id="finished"></p> <p>/</p> <p id="total"></p>
-		<button id="show_result" style="display: none;" onclick="result()">RESULT</button>
+		<p>Processing <span id="finished"></span> / <span id="total"></span> files...</p>
 	</div>
-	<div id="result">
+	<div id="result" style="width:50%">
 		<canvas id="myChart"></canvas>
 	</div>
   </body>

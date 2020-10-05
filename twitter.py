@@ -1,4 +1,5 @@
 from glob import glob
+from random import sample
 from collections import Counter
 from flask import Flask, request, jsonify
 from flask import render_template
@@ -26,7 +27,7 @@ def tweet_index():
 #     return count
 
 def create_tasks(amount=None):
-    file_names = glob("/home/ubuntu/ACC_lab3/data/*")[:amount]
+    file_names = sample(glob("/home/ubuntu/ACC_lab3/data/*"), amount)
     task_ids = []
     for f_n in file_names:
         running_task = tweet_task.delay(f_n)

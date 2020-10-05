@@ -16,6 +16,15 @@ def tweet_index():
     total = len(glob("/home/ubuntu/ACC_lab3/data/*"))
     return render_template('index.html', total=total)
 
+## Simple API for task 1
+# def create_tasks(amount=None):
+#     file_names = glob("/home/ubuntu/ACC_lab3/data/*")[:amount]
+#     count = Counter({})
+#     for f_n in file_names:
+#         running_task = tweet_task.delay(f_n)
+#         count += Counter(running_task.get())
+#     return count
+
 def create_tasks(amount=None):
     file_names = glob("/home/ubuntu/ACC_lab3/data/*")[:amount]
     task_ids = []

@@ -5,10 +5,21 @@
 	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 	<script>
+		var startTime, endTime
+		function start() {
+			startTime = new Date();
+		}
+		function end() {
+  			endTime = new Date();
+			var timeDiff = endTime - startTime; //in ms
+			console.log(timeDiff);
+		}	
+
 		function submit() {
 			var amount = document.getElementById("amount").value;
 			var url = "http://localhost:5000/tweet/"+amount.toString();
 			$.get(url, function(data){
+				start();
 				var paragraph = document.getElementById("total");
 				paragraph.textContent = amount;
 				progress(data, amount);
@@ -17,7 +28,7 @@
 		
 		function progress(task_ids, amount) {
 			document.getElementById("progress").style.display = "block";
-			var timer, delay = 1000;
+			var timer, delay = 100;
 			timer = setInterval(function(){
 				$.ajax({
     					url : "http://localhost:5000/tweet/progress", 
@@ -29,9 +40,9 @@
        						var finished = document.getElementById("finished");
                                 		finished.textContent = data;
 						if (data == amount) {
+							end();
 							clearInterval(timer);
 							result(task_ids);
-							document.getElementById("show_result").style.display = "block";
 						}
     					},
 				});

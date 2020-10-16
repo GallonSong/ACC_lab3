@@ -11,7 +11,7 @@ ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
 
 sudo apt install python3-pip
 sudo apt-get install -y rabbitmq-server
-pip3 install –upgrade pip
+pip3 install --upgrade pip
 pip3 install celery==4.1.1
 pip3 install celery[redis]
 pip3 install flask

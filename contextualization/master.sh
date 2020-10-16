@@ -2,6 +2,7 @@ sudo add-apt-repository -y cloud-archive:stein
 sudo add-apt-repository -y cloud-archive:rocky
 sudo apt update && sudo apt -y dist-upgrade
 sudo apt install -y python3-openstackclient
+sudo apt install python3-pip
 
 sudo apt-get install -y rabbitmq-server
 pip3 install –upgrade pip

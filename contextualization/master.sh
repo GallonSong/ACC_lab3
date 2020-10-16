@@ -16,6 +16,7 @@ pip3 install celery==4.1.1
 pip3 install celery[redis]
 pip3 install flask
 pip3 install flower
+export PATH=$PATH:/home/ubuntu/.local/bin
 
 sudo rabbitmqctl add_user js js
 sudo rabbitmqctl add_vhost jsvhost
